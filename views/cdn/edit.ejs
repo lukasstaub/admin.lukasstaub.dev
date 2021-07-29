@@ -1,0 +1,42 @@
+<form class="container form" action="/cdn/edit/<%= row.id %>" method="POST" enctype="multipart/form-data">
+    <% if(query.error) { %>
+    <div class="alert alert-danger" role="alert"><%= query.error %></div>
+    <%}%>
+
+    <h1 class="mb-3">Edit "<%= row.name %>"</h1>
+
+    <div class="mb-3">
+        <label for="filename-input" class="form-label">Filename</label>
+        <input id="filename-input" type="text" class="form-control" placeholder="Filename" value="<%= row.name %>" name="name" required />
+    </div>
+    <div class="mb-3">
+        <label for="content_type-input" class="form-label">Content Type</label>
+        <input id="content_type-input" type="text" class="form-control" placeholder="Content Type" value="<%= row.content_type %>" disabled name="content_type" />
+    </div>
+    <div class="my-4">
+        <input type="file" accept="*" class="form-control" name="file" />
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <a href="/cdn" class="btn btn-secondary ms-3">Cancel</a>
+        <button type="button" class="btn btn-success ms-3" data-bs-toggle="modal" data-bs-target="#preview-modal">Show</button>
+        <button type="submit" class="btn btn-primary ms-3">Update</button>
+    </div>
+</form>
+
+<div class="modal fade" id="preview-modal" tabindex="-1" aria-labelledby="preview-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="preview-modal-label">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="previewImg" style="width: 100%" src="https://cdn.lukasstaub.dev/<%= row.name %>" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

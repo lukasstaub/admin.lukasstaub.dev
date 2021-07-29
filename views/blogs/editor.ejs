@@ -1,0 +1,103 @@
+<style>
+    .ck .ck-editor__main .ck-content {
+        height: 700px !important;
+    }
+</style>
+
+<div class="p-3 d-flex">
+    <form method="POST" enctype="multipart/form-data" class="w-75" <% if(blog.slug) { %>
+        action="/blogs/edit/<%= blog.id %>" <% } %>>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input id="title" type="text" class="form-control" placeholder="Title" name="title" required value="<%= blog.title %>" />
+        </div>
+        <% if(blog.slug) {%>
+        <div class="mb-3">
+            <label for="slug" class="form-label">Slug</label>
+            <input id="slug" type="text" class="form-control" placeholder="Slug" disabled value="<%= blog.slug %>" />
+        </div>
+        <%}%>
+        <div class="mb-3">
+            <label for="select-category" class="form-label">Category</label>
+            <select id="select-category" class="form-select" aria-label="Select Category" name="category" value="<%= blog.category_id %>">
+                <% if(blog.slug) { %>
+                <option disabled>Select Category</option>
+                <% } else { %>
+                <option selected disabled>Select Category</option>
+                <% } %> <% categories.map((cat) => { %>
+                <option value="<%= cat.id %>"><%= cat.name %></option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="mt-4">
+            <textarea name="body">
+                <%- blog.body %>
+            </textarea>
+        </div>
+        <div class="mt-4 d-flex justify-content-end">
+            <a href="/blogs" class="btn btn-secondary ms-3">Cancel</a>
+            <% if(blog.slug && !blog.published_at) { %> <a href="/blogs/publish/<%= blog.id %>" class="btn btn-success ms-3">Publish</a> <% } %>
+            <button type="submit" class="btn btn-primary ms-3">Save</button>
+        </div>
+    </form>
+    <div id="manage" class="ms-5 w-25">
+        <div class="list-group mb-4">
+            <div class="list-group-item d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">Files</h3>
+                <label for="uploadFileInput" class="btn btn-primary">
+                    <input id="uploadFileInput" type="file" accept="*" class="d-none" v-on:change="onFile" />
+                    Upload
+                </label>
+            </div>
+            <div class="list-group-item d-flex align-items-center justify-content-between" v-for="file in media">
+                <p class="mb-0">
+                    {{ file.name }}
+                </p>
+                <div>
+                    <button class="btn btn-primary" v-on:click="copyUrl(file.url)">Copy URL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/vue-production.js"></script>
+<script src="/js/ckeditor.js"></script>
+<script async type="module">
+    try {
+        ClassicEditor.create(document.querySelector("textarea"));
+    } catch (e) {
+        console.error(e);
+    }
+
+    const media = await fetch("/api/media").then((res) => res.json());
+
+    var app = new Vue({
+        el: "#manage",
+        data: {
+            media: media,
+        },
+        methods: {
+            getMedia: async function () {
+                const data = await fetch("/api/media").then((res) => res.json());
+                this.media = data;
+            },
+
+            copyUrl: function (url) {
+                navigator.clipboard.writeText(url);
+            },
+            onFile: async function (e) {
+                var formData = new FormData();
+                formData.append("file", e.target.files[0]);
+
+                await fetch("/cdn/upload", {
+                    method: "POST",
+                    body: formData,
+                    credentials: "include",
+                });
+
+                await this.getMedia();
+            },
+        },
+    });
+</script>

@@ -1,0 +1,53 @@
+<div class="container">
+    <% if(query.error) { %>
+    <div class="alert alert-danger mb-3" role="alert"><%= query.error %></div>
+    <% } %> <% if(query.success) { %>
+    <div class="alert alert-success mb-3" role="alert">Successfully applied changes!</div>
+    <% } %>
+
+    <div class="mb-3">
+        <h1><%= user.name %></h1>
+        <p><%= user.username %> - <%= user.email %></p>
+    </div>
+    <div class="card mb-4">
+        <form class="card-body" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name-field" class="form-label">Name</label>
+                <input id="name-field" type="text" class="form-control" value="<%= user.name %>" required name="Name" />
+            </div>
+            <div class="mb-3">
+                <label for="email-field" class="form-label">Email</label>
+                <input id="email-field" type="email" class="form-control" value="<%= user.email %>" required name="Email" />
+            </div>
+            <div class="mb-3">
+                <label for="username-field" class="form-label">Username</label>
+                <input id="username-field" type="text" class="form-control" value="<%= user.username %>" required name="Username" />
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+    <form method="POST" enctype="multipart/form-data" action="/change-password" class="card">
+        <div class="card-header">
+            <h3 class="card-title mb-0">Change Password</h3>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="password" class="form-label">Current Password</label>
+                <input id="password" type="password" class="form-control" placeholder="Current Password" name="password" required />
+            </div>
+            <div class="mb-3">
+                <label for="newPassword" class="form-label">New Password</label>
+                <input id="newPassword" type="password" class="form-control" placeholder="New Password" name="newPassword" required />
+            </div>
+            <div class="mb-3">
+                <label for="rpNewPw" class="form-label">Repeat new Password</label>
+                <input id="rpNewPw" type="password" class="form-control" placeholder="Repeat new Password" name="rpNewPw" required />
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

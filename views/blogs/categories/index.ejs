@@ -1,0 +1,43 @@
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <td>#</td>
+            <td>Name</td>
+            <td>
+                <div class="d-flex justify-content-end">
+                    <a href="/blogs/categories/new" class="btn btn-primary ms-3">New</a>
+                </div>
+            </td>
+        </thead>
+        <tbody>
+            <% if(cats.length > 0) { cats.map((el) => { %>
+            <tr>
+                <td><p><%= el.id %></p></td>
+                <td><p><%= el.name %></p></td>
+                <td>
+                    <div class="d-flex justify-content-end">
+                        <a href="/blogs/categories/edit?id=<%= el.id %>" class="btn btn-secondary">Edit</a>
+                        <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            <% }) } else { %>
+            <tr>
+                <td colspan="6">
+                    <p style="text-align: center">No Categories yet</p>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function delItem(id) {
+        const confirmed = confirm("Do you really want to delete this object?");
+
+        if (confirmed) {
+            window.location.href = "/blogs/categories/delete?id=" + id;
+        }
+    }
+</script>

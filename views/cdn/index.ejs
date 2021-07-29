@@ -1,0 +1,75 @@
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <td>Name</td>
+            <td>Type</td>
+            <td>Uploaded</td>
+            <td>UserID</td>
+            <td>
+                <form class="d-flex justify-content-end" id="uploadForm" action="/cdn/upload" method="POST" enctype="multipart/form-data">
+                    <label class="btn btn-primary" for="upload">
+                        <input type="file" accept="*" id="upload" class="d-none" onchange="startFileUpload()" name="file" />
+                        Upload
+                    </label>
+                </form>
+            </td>
+        </thead>
+        <tbody>
+            <% contents.map((el) => { %>
+            <tr>
+                <td><p><%= el.name %></p></td>
+                <td><p><%= el.content_type %></p></td>
+                <td><p><%= new Date(el.timestamp).toLocaleString() %></p></td>
+                <td><p><%= el.user_id %></p></td>
+                <td>
+                    <div class="d-flex justify-content-end">
+                        <% if(el.content_type.includes("image")) { %>
+                        <button class="btn btn-secondary ms-3" onclick="setPreviewUrl('<%= el.url %>')" data-bs-toggle="modal" data-bs-target="#preview-modal">Show</button>
+                        <% } else { %>
+                        <a href="<%= el.url %>" target="blank" class="btn btn-secondary ms-3">Download</a>
+                        <% } %>
+                        <button class="btn btn-secondary ms-3" onclick="navigator.clipboard.writeText('<%= el.url %>')">Copy URL</button>
+                        <a href="/cdn/edit?id=<%= el.id %>" class="btn btn-primary ms-3">Edit</a>
+                        <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="preview-modal" tabindex="-1" aria-labelledby="preview-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="preview-modal-label">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="previewImg" style="width: 100%" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setPreviewUrl(url) {
+        document.getElementById("previewImg").src = url;
+    }
+
+    function startFileUpload() {
+        document.getElementById("uploadForm").submit();
+    }
+
+    function delItem(id) {
+        const confirmed = confirm("Do you really want to delete this object?");
+
+        if (confirmed) {
+            window.location.href = "/cdn/delete?id=" + id;
+        }
+    }
+</script>

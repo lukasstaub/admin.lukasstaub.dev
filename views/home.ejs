@@ -1,0 +1,63 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style></style>
+
+<div class="container py-2">
+    <canvas id="request-amount-chart" height="150" class="mb-5"></canvas>
+    <canvas id="user-device-chart" height="150" class="mb-5"></canvas>
+    <canvas id="user-browser-chart" height="150" class="mb-5"></canvas>
+</div>
+
+<script>
+    const data = JSON.parse(`<%- JSON.stringify(userAgentData) %>`);
+    const requestData = JSON.parse(`<%- JSON.stringify(requestData) %>`);
+
+    let userAgentCount = {};
+    let browserInfoCount = {};
+
+    let requestCount = {};
+
+    data.forEach((el) => {
+        if (el.user_agent.includes("Mozilla")) {
+            let deviceInfo = el.user_agent.split("(")[1].split(")")[0].split(";")[1];
+            userAgentCount[deviceInfo] = userAgentCount[deviceInfo] ? userAgentCount[deviceInfo] + 1 : 1;
+
+            let browserInfo = el.user_agent.split(" ");
+
+            browserInfoCount[`${browserInfo[browserInfo.length - 2]}, ${browserInfo[browserInfo.length - 1]}`] = browserInfoCount[`${browserInfo[browserInfo.length - 2]}, ${browserInfo[browserInfo.length - 1]}`] ? browserInfoCount[`${browserInfo[browserInfo.length - 2]}, ${browserInfo[browserInfo.length - 1]}`] + 1 : 1;
+        }
+    });
+
+    requestData.forEach((el) => {
+        requestCount[el.page_name] = requestCount[el.page_name] ? requestCount[el.page_name] + 1 : 1;
+    });
+
+    const ctx1 = document.getElementById("user-device-chart").getContext("2d");
+    var userAgenChart = returnChart(userAgentCount, ctx1, "#0099ff", "Device Types connecting to lukasstaub.dev Services");
+
+    const ctx2 = document.getElementById("user-browser-chart").getContext("2d");
+    var userBrowserChart = returnChart(browserInfoCount, ctx2, "#B53471", "Browsers connecting to lukasstaub.dev Services");
+
+    const ctx3 = document.getElementById("request-amount-chart").getContext("2d");
+    var userBrowserChart = returnChart(requestCount, ctx3, "#F79F1F", "Number of Monthly requests to lukasstaub.dev Services", "x");
+
+    function returnChart(objectWithCount, ctx, color, title, orientation = "y") {
+        return new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: Object.keys(objectWithCount),
+                datasets: [
+                    {
+                        label: title,
+                        data: Object.keys(objectWithCount).map((key) => objectWithCount[key]),
+                        backgroundColor: Object.keys(objectWithCount).map((_) => color),
+                        borderColor: Object.keys(objectWithCount).map((_) => color),
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                indexAxis: orientation,
+            },
+        });
+    }
+</script>
