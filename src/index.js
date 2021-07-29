@@ -12,14 +12,17 @@ router.get("/", async (req, res) => {
 
     const query1 = `SELECT id, user_agent FROM access_logs WHERE ROUND(UNIX_TIMESTAMP(request_time) * 1000) > ${new Date(`${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} 00:00:00`).getTime()}`;
     const query2 = `SELECT id, page_name FROM access_logs WHERE ROUND(UNIX_TIMESTAMP(request_time) * 1000) > ${new Date(`${today.getFullYear()}-${today.getMonth()}-${today.getDate()} 00:00:00`).getTime()}`;
+    const query3 = `SELECT id, requested_resource FROM access_logs WHERE ROUND(UNIX_TIMESTAMP(request_time) * 1000) > ${new Date(`${today.getFullYear()}-${today.getMonth()}-${today.getDate()} 00:00:00`).getTime()}`;
 
     const [userAgentData] = await knex.raw(query1);
     const [requestData] = await knex.raw(query2);
+    const [requestedResourcesData] = await knex.raw(query3);
 
     return res.render("home", {
         user: req.user,
         userAgentData,
         requestData,
+        requestedResourcesData,
     });
 });
 

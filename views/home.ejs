@@ -3,6 +3,7 @@
 
 <div class="container py-2">
     <canvas id="request-amount-chart" height="150" class="mb-5"></canvas>
+    <canvas id="request-resource-chart" height="150" class="mb-5"></canvas>
     <canvas id="user-device-chart" height="150" class="mb-5"></canvas>
     <canvas id="user-browser-chart" height="150" class="mb-5"></canvas>
 </div>
@@ -10,11 +11,13 @@
 <script>
     const data = JSON.parse(`<%- JSON.stringify(userAgentData) %>`);
     const requestData = JSON.parse(`<%- JSON.stringify(requestData) %>`);
+    const requestedResourcesData = JSON.parse(`<%- JSON.stringify(requestedResourcesData) %>`);
 
     let userAgentCount = {};
     let browserInfoCount = {};
 
     let requestCount = {};
+    let requestedResourcesCount = {};
 
     data.forEach((el) => {
         if (el.user_agent.includes("Mozilla")) {
@@ -31,6 +34,12 @@
         requestCount[el.page_name] = requestCount[el.page_name] ? requestCount[el.page_name] + 1 : 1;
     });
 
+    requestedResourcesData.forEach((el) => {
+        if (!el.requested_resource.includes(".")) {
+            requestedResourcesCount[el.requested_resource] = requestedResourcesCount[el.requested_resource] ? requestedResourcesCount[el.requested_resource] + 1 : 1;
+        }
+    });
+
     const ctx1 = document.getElementById("user-device-chart").getContext("2d");
     var userAgenChart = returnChart(userAgentCount, ctx1, "#0099ff", "Device Types connecting to lukasstaub.dev Services");
 
@@ -39,6 +48,9 @@
 
     const ctx3 = document.getElementById("request-amount-chart").getContext("2d");
     var userBrowserChart = returnChart(requestCount, ctx3, "#F79F1F", "Number of Monthly requests to lukasstaub.dev Services", "x");
+
+    const ctx4 = document.getElementById("request-resource-chart").getContext("2d");
+    var userBrowserChart = returnChart(requestedResourcesCount, ctx4, "#f3a683", "Number of most requested resources of the Month");
 
     function returnChart(objectWithCount, ctx, color, title, orientation = "y") {
         return new Chart(ctx, {
