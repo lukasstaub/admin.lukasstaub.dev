@@ -30,6 +30,7 @@ app.use(
     })
 );
 
+app.use("/assets", express.static(path.join(__dirname, "./public/assets")));
 app.use("/js", express.static(path.join(__dirname, "./public/js")));
 app.set("view engine", "ejs");
 
