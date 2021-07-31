@@ -1,11 +1,25 @@
 <style>
-    .ck .ck-editor__main .ck-content {
-        height: 700px !important;
+    .ck.ck-word-count {
+        display: flex;
+    }
+
+    .ck.ck-word-count > * {
+        margin-right: 1rem;
+    }
+
+    #manage {
+        width: 30%;
+    }
+
+    @media only screen and (max-width: 1600px) {
+        #manage {
+            display: none;
+        }
     }
 </style>
 
-<div class="p-3 d-flex">
-    <form method="POST" enctype="multipart/form-data" class="w-100 w-xl-75" <% if(project.slug) { %>
+<div class="d-flex">
+    <form method="POST" enctype="multipart/form-data" class="w-100 py-3 container" <% if(project.slug) { %>
         action="/projects/edit/<%= project.id %>" <% } %>>
         <h1><% if(project.slug) { %> Edit Project <% } else { %> New Project <% } %></h1>
         <div class="mb-3">
@@ -24,22 +38,27 @@
         <%}%>
         <div class="mt-4">
             <textarea name="content">
-                <%- project.content %>
-            </textarea>
+                    <%- project.content %>
+                </textarea
+            >
+            <div id="word-count-wrapper" class="d-flex align-items-center"></div>
         </div>
         <div class="mt-4 d-flex justify-content-end">
             <a href="/projects" class="btn btn-secondary ms-3">Cancel</a>
             <button type="submit" class="btn btn-primary ms-3">Save</button>
         </div>
     </form>
-    <div id="manage" class="ms-4 w-25 d-none d-xl-block">
+    <div id="manage" class="p-3">
         <div class="list-group mb-4">
             <div class="list-group-item d-flex align-items-center justify-content-between">
                 <h3 class="mb-0">Files</h3>
-                <label for="uploadFileInput" class="btn btn-primary">
-                    <input id="uploadFileInput" type="file" accept="*" class="d-none" v-on:change="onFile" />
-                    Upload
-                </label>
+                <div>
+                    <button class="btn btn-secondary" v-on:click="getMedia()">Reload</button>
+                    <label for="uploadFileInput" class="btn btn-primary ms-2">
+                        <input id="uploadFileInput" type="file" accept="*" class="d-none" v-on:change="onFile" />
+                        Upload
+                    </label>
+                </div>
             </div>
             <div class="list-group-item d-flex align-items-center justify-content-between" v-for="file in media">
                 <p class="mb-0">
@@ -55,41 +74,4 @@
 
 <script src="/js/vue-<%= process.env.NODE_ENV %>.js"></script>
 <script src="/js/ckeditor.js"></script>
-<script async type="module">
-    try {
-        ClassicEditor.create(document.querySelector("textarea"));
-    } catch (e) {
-        console.error(e);
-    }
-
-    const media = await fetch("/api/media").then((res) => res.json());
-
-    var app = new Vue({
-        el: "#manage",
-        data: {
-            media: media,
-        },
-        methods: {
-            getMedia: async function () {
-                const data = await fetch("/api/media").then((res) => res.json());
-                this.media = data;
-            },
-
-            copyUrl: function (url) {
-                navigator.clipboard.writeText(url);
-            },
-            onFile: async function (e) {
-                var formData = new FormData();
-                formData.append("file", e.target.files[0]);
-
-                await fetch("/cdn/upload", {
-                    method: "POST",
-                    body: formData,
-                    credentials: "include",
-                });
-
-                await this.getMedia();
-            },
-        },
-    });
-</script>
+<script async type="module" src="/js/editor.js"></script>

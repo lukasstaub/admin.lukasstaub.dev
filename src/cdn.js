@@ -57,7 +57,14 @@ cdn.post("/edit/:id", async (req, res) => {
 });
 
 cdn.post("/upload", async (req, res) => {
-    const file = req.files.file;
+    let file;
+    const { code } = req.query;
+
+    if (code) {
+        file = req.files.upload;
+    } else {
+        file = req.files.file;
+    }
 
     try {
         await knex("files").insert({
@@ -67,7 +74,13 @@ cdn.post("/upload", async (req, res) => {
             user_id: req.user.id,
         });
 
-        return res.redirect("/cdn");
+        if (code) {
+            return res.json({
+                url: "https://cdn.lukasstaub.dev/" + file.name,
+            });
+        } else {
+            return res.redirect("/cdn");
+        }
     } catch (e) {
         return res.redirect("/cdn");
     }
