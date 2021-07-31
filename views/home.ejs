@@ -33,15 +33,17 @@
         .ls-container > canvas {
             max-height: 60vh !important;
             max-width: calc(100vw - calc(4rem + 1rem));
+            margin: 1rem 0;
+            justify-self: center;
         }
     }
 </style>
 
-<div class="ls-container">
+<div class="ls-container py-2">
     <canvas id="request-amount-chart" height="150" class="mb-5"></canvas>
-    <canvas id="request-resource-chart" height="150" class="mb-5"></canvas>
-
     <canvas id="user-agent-chart" height="150" class="mb-5"></canvas>
+
+    <canvas id="request-resource-chart" height="150" class="mb-5"></canvas>
     <canvas id="email-sent-chart" height="150" class="mb-5"></canvas>
 </div>
 
@@ -88,7 +90,7 @@
     var requestAmountChart = returnChart(requestAmount, ctx, "Most accessed pages of the Month", "x");
 
     const ctx2 = document.getElementById("user-agent-chart").getContext("2d");
-    var userAgentChart = returnChart(userAgentDataCount, ctx2, "Devices accessing lukasstaub.dev in the last 24h", "y");
+    var userAgentChart = returnChart(userAgentDataCount, ctx2, "Devices accessing lukasstaub.dev in the last 24h", "y", "pie");
 
     const ctx3 = document.getElementById("request-resource-chart").getContext("2d");
     var resourcesChart = returnChart(resources, ctx3, "Most requested resources of the Month");
