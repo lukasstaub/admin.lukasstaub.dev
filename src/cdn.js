@@ -15,6 +15,8 @@ cdn.get("/edit", async (req, res) => {
     if (id) {
         const [row] = await knex("files").select("id", "name", "content_type").where("id", "=", id);
 
+        if (!row) return res.render("404", { user: req.user });
+
         return res.render("cdn/edit", { user: req.user, row, query: req.query });
     } else {
         return res.redirect("/cdn");

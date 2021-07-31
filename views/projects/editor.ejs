@@ -5,39 +5,30 @@
 </style>
 
 <div class="p-3 d-flex">
-    <form method="POST" enctype="multipart/form-data" class="w-100 w-xl-75" <% if(blog.slug) { %>
-        action="/blogs/edit/<%= blog.id %>" <% } %>>
-        <h1><% if(blog.slug) { %> Edit Blogpost <% } else { %> New Blogpost <% } %></h1>
+    <form method="POST" enctype="multipart/form-data" class="w-100 w-xl-75" <% if(project.slug) { %>
+        action="/projects/edit/<%= project.id %>" <% } %>>
+        <h1><% if(project.slug) { %> Edit Project <% } else { %> New Project <% } %></h1>
         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input id="title" type="text" class="form-control" placeholder="Title" name="title" required value="<%= blog.title %>" />
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" class="form-control" placeholder="Name" name="name" required value="<%= project.name %>" />
         </div>
-        <% if(blog.slug) {%>
+        <div class="mb-3">
+            <label for="imgUrl" class="form-label">Image URL</label>
+            <input id="imgUrl" type="text" class="form-control" placeholder="Image URL" name="imgUrl" required value="<%= project.image_url %>" />
+        </div>
+        <% if(project.slug) {%>
         <div class="mb-3">
             <label for="slug" class="form-label">Slug</label>
-            <input id="slug" type="text" class="form-control" placeholder="Slug" disabled value="<%= blog.slug %>" />
+            <input id="slug" type="text" class="form-control" placeholder="Slug" disabled value="<%= project.slug %>" />
         </div>
         <%}%>
-        <div class="mb-3">
-            <label for="select-category" class="form-label">Category</label>
-            <select id="select-category" class="form-select" aria-label="Select Category" name="category" value="<%= blog.category_id %>">
-                <% if(blog.slug) { %>
-                <option disabled>Select Category</option>
-                <% } else { %>
-                <option selected disabled>Select Category</option>
-                <% } %> <% categories.map((cat) => { %>
-                <option value="<%= cat.id %>"><%= cat.name %></option>
-                <% }) %>
-            </select>
-        </div>
         <div class="mt-4">
-            <textarea name="body">
-                <%- blog.body %>
+            <textarea name="content">
+                <%- project.content %>
             </textarea>
         </div>
         <div class="mt-4 d-flex justify-content-end">
-            <a href="/blogs" class="btn btn-secondary ms-3">Cancel</a>
-            <% if(blog.slug && !blog.published_at) { %> <a href="/blogs/publish/<%= blog.id %>" class="btn btn-success ms-3">Publish</a> <% } %>
+            <a href="/projects" class="btn btn-secondary ms-3">Cancel</a>
             <button type="submit" class="btn btn-primary ms-3">Save</button>
         </div>
     </form>

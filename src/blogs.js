@@ -13,12 +13,12 @@ blogs.get("/", async (req, res) => {
     return res.render("blogs/index", { user: req.user, contents });
 });
 
+//create blogpost
 blogs.get("/new", async (req, res) => {
     const cats = await knex("categories").orderBy("name", "asc");
 
     return res.render("blogs/editor", { user: req.user, categories: cats, blog: {} });
 });
-
 blogs.post("/new", async (req, res) => {
     const { title, category, body } = req.body;
 
@@ -33,6 +33,7 @@ blogs.post("/new", async (req, res) => {
     return res.redirect("/blogs/edit?id=" + id);
 });
 
+//edit blogpost
 blogs.get("/edit", async (req, res) => {
     const { id } = req.query;
 
@@ -41,9 +42,10 @@ blogs.get("/edit", async (req, res) => {
     const cats = await knex("categories").orderBy("name", "asc");
     const [blog] = await knex("blogs").where("id", "=", id);
 
+    if (!blog) return res.render("404", { user: req.user });
+
     return res.render("blogs/editor", { user: req.user, blog, categories: cats });
 });
-
 blogs.post("/edit/:id", async (req, res) => {
     const { id } = req.params;
 
@@ -64,6 +66,7 @@ blogs.post("/edit/:id", async (req, res) => {
     return res.redirect("/blogs/edit?id=" + id);
 });
 
+//publish blogpost
 blogs.get("/publish/:id", async (req, res) => {
     const { id } = req.params;
 
@@ -76,6 +79,7 @@ blogs.get("/publish/:id", async (req, res) => {
     return res.redirect("/blogs");
 });
 
+//delete blogpost
 blogs.get("/delete", async (req, res) => {
     const { id } = req.query;
 
@@ -90,16 +94,17 @@ blogs.get("/delete", async (req, res) => {
     }
 });
 
+//Categories section
 blogs.get("/categories", async (req, res) => {
     const cats = await knex("categories").orderBy("name", "asc");
 
     return res.render("blogs/categories/index", { user: req.user, cats });
 });
 
+//create new
 blogs.get("/categories/new", (req, res) => {
     return res.render("blogs/categories/editor", { user: req.user, category: {} });
 });
-
 blogs.post("/categories/new", async (req, res) => {
     const { name } = req.body;
 
@@ -112,6 +117,7 @@ blogs.post("/categories/new", async (req, res) => {
     return res.redirect("/blogs/categories");
 });
 
+//edit
 blogs.get("/categories/edit", async (req, res) => {
     const { id } = req.query;
 
@@ -121,7 +127,6 @@ blogs.get("/categories/edit", async (req, res) => {
 
     return res.render("blogs/categories/editor", { user: req.user, category: data });
 });
-
 blogs.post("/categories/edit", async (req, res) => {
     const { id, name } = req.body;
 
@@ -134,6 +139,7 @@ blogs.post("/categories/edit", async (req, res) => {
     return res.redirect("/blogs/categories");
 });
 
+//delete
 blogs.get("/categories/delete", async (req, res) => {
     const { id } = req.query;
 

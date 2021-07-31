@@ -5,6 +5,7 @@ const cdn = require("./cdn");
 const knex = require("./helpers/knex");
 const bcrypt = require("bcryptjs");
 const useragent = require("useragent");
+const projects = require("./projects");
 
 const router = Router();
 
@@ -65,8 +66,13 @@ router.get("/logout", (_, res) => {
     return res.cookie(process.env.COOKIE_NAME, "", { expires: new Date() }).redirect("/");
 });
 
+router.use("/api", api);
 router.use("/cdn", cdn);
 router.use("/blogs", blogs);
-router.use("/api", api);
+router.use("/projects", projects);
+
+router.get("/*", (req, res) => {
+    return res.render("404", { user: req.user });
+});
 
 module.exports = router;

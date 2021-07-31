@@ -2,21 +2,25 @@
     <table class="table table-bordered table-striped">
         <thead>
             <td>#</td>
+            <td>Slug</td>
             <td>Name</td>
+            <td>Created</td>
             <td>
                 <div class="d-flex justify-content-end">
-                    <a href="/blogs/categories/new" class="btn btn-primary ms-3">New</a>
+                    <a href="/projects/new" class="btn btn-primary ms-3">New</a>
                 </div>
             </td>
         </thead>
         <tbody>
-            <% if(cats.length > 0) { cats.map((el) => { %>
+            <% if(contents.length > 0) { contents.map((el) => { %>
             <tr>
                 <td><p><%= el.id %></p></td>
+                <td><p><%= el.slug %></p></td>
                 <td><p><%= el.name %></p></td>
+                <td><p><%= new Date(el.timestamp).toLocaleString() %></p></td>
                 <td>
                     <div class="d-flex justify-content-end">
-                        <a href="/blogs/categories/edit?id=<%= el.id %>" class="btn btn-secondary">Edit</a>
+                        <a href="/projects/edit?id=<%= el.id %>" class="btn btn-secondary">Edit</a>
                         <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
                     </div>
                 </td>
@@ -24,7 +28,7 @@
             <% }) } else { %>
             <tr>
                 <td colspan="6">
-                    <p style="text-align: center">No Categories yet</p>
+                    <p style="text-align: center">No Projects yet</p>
                 </td>
             </tr>
             <% } %>
@@ -37,7 +41,7 @@
         const confirmed = confirm("Do you really want to delete this object?");
 
         if (confirmed) {
-            window.location.href = "/blogs/categories/delete?id=" + id;
+            window.location.href = "/projects/delete?id=" + id;
         }
     }
 </script>
