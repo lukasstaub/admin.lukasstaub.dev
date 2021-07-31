@@ -46,7 +46,14 @@ app.post("/login", async (req, res) => {
             if (authed) {
                 const newJwt = jwt.sign({ user_id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-                return res.cookie(process.env.COOKIE_NAME, newJwt, { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), secure: process.env.NODE_ENV === "production", httpOnly: true }).redirect("/");
+                return res
+                    .cookie(process.env.COOKIE_NAME, newJwt, {
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+                        secure: process.env.NODE_ENV === "production",
+                        httpOnly: true,
+                        domain: process.env.NODE_ENV === "production" ? ".lukasstaub.dev" : "localhost",
+                    })
+                    .redirect("/");
             } else {
                 return res.redirect("/?auth-error=wUnOpw");
             }
