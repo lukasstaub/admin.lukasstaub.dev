@@ -63,7 +63,14 @@ router.post("/change-password", async (req, res) => {
 });
 
 router.get("/logout", (_, res) => {
-    return res.cookie(process.env.COOKIE_NAME, "", { expires: new Date() }).redirect("/");
+    return res
+        .cookie(process.env.COOKIE_NAME, "", {
+            expires: new Date(),
+            secure: process.env.NODE_ENV === "production",
+            httpOnly: true,
+            domain: process.env.NODE_ENV === "production" ? ".lukasstaub.dev" : "localhost",
+        })
+        .redirect("/");
 });
 
 router.use("/api", api);
