@@ -150,4 +150,29 @@ blogs.get("/categories/delete", async (req, res) => {
     return res.redirect("/blogs/categories");
 });
 
+//Comments Section
+blogs.get("/comments", async (req, res) => {
+    const comments = await knex("comments").orderBy("approved_at", "asc");
+
+    return res.render("blogs/comments", { user: req.user, contents: comments });
+});
+
+blogs.get("/comments/approve/:id", async (req, res) => {
+    await knex("comments").where("id", "=", req.params.id).update({
+        approved_at: new Date(),
+    });
+
+    return res.redirect("/blogs/comments");
+});
+
+blogs.get("/comments/delete", async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) return res.redirect("/blogs/comments");
+
+    await knex("comments").where("id", "=", id).del();
+
+    return res.redirect("/blogs/comments");
+});
+
 module.exports = blogs;

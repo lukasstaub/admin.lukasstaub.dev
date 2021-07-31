@@ -1,0 +1,77 @@
+<div class="container py-3">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <td>#</td>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Approved At</td>
+            <td>Submitted At</td>
+            <td>IP</td>
+            <td></td>
+        </thead>
+        <tbody>
+            <% if(contents.length > 0) { contents.map((el) => { %>
+            <tr>
+                <td><p><%= el.id %></p></td>
+                <td><p><%= el.name %></p></td>
+                <td><p><%= el.email %></p></td>
+                <td>
+                    <% if(el.approved_at) { %>
+                    <p class="text-success fw-bold"><%= new Date(el.approved_at).toLocaleString() %></p>
+                    <% } else { %>
+                    <p class="text-danger fw-bold">Pending</p>
+                    <% } %>
+                </td>
+                <td><p><%= new Date(el.submitted_at).toLocaleString() %></p></td>
+                <td><p><%= el.ip %></p></td>
+                <td>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary" onclick="setBody('<%= el.body %>')" data-bs-toggle="modal" data-bs-target="#preview-modal">Show</button>
+                        <% if(!el.approved_at) { %>
+                        <a href="/blogs/comments/approve/<%= el.id %>" class="btn btn-success ms-3">Approve</a>
+                        <% } %>
+                        <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            <% }) } else { %>
+            <tr>
+                <td colspan="7">
+                    <p style="text-align: center">No Comments yet</p>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="preview-modal" tabindex="-1" aria-labelledby="preview-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="preview-modal-label">Content Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="preview-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function delItem(id) {
+        const confirmed = confirm("Do you really want to delete this object?");
+
+        if (confirmed) {
+            window.location.href = "/blogs/comments/delete?id=" + id;
+        }
+    }
+
+    function setBody(content) {
+        document.getElementById("preview-text").innerText = content;
+    }
+</script>
