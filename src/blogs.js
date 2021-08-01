@@ -20,7 +20,7 @@ blogs.get("/new", async (req, res) => {
     return res.render("blogs/editor", { user: req.user, categories: cats, blog: {} });
 });
 blogs.post("/new", async (req, res) => {
-    const { title, category, body } = req.body;
+    const { title, category, body, language } = req.body;
 
     const [id] = await knex("blogs").insert({
         title: title,
@@ -28,6 +28,7 @@ blogs.post("/new", async (req, res) => {
         user_id: req.user.id,
         category_id: category,
         body,
+        language,
     });
 
     return res.redirect("/blogs/edit?id=" + id);
@@ -51,7 +52,7 @@ blogs.post("/edit/:id", async (req, res) => {
 
     if (!id) return res.redirect("/blogs");
 
-    const { title, category, body } = req.body;
+    const { title, category, body, language } = req.body;
 
     await knex("blogs")
         .where("id", "=", id)
@@ -61,6 +62,7 @@ blogs.post("/edit/:id", async (req, res) => {
             user_id: req.user.id,
             category_id: category,
             body,
+            language,
         });
 
     return res.redirect("/blogs/edit?id=" + id);
