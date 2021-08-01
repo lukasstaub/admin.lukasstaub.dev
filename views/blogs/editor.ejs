@@ -37,9 +37,9 @@
                 <label for="select-category" class="form-label">Category</label>
                 <select id="select-category" class="form-select" aria-label="Select Category" name="category" >
                     <% if(blog.slug) { %>
-                    <option>Select Category</option>
+                    <option value="null">Select Category</option>
                     <% } else { %>
-                    <option selected>Select Category</option>
+                    <option selected value="null">Select Category</option>
                     <% } categories.map((cat) => { %>
                     <option value="<%= cat.id %>" <% if(blog.category_id === cat.id) { %>selected<% } %> ><%= cat.name %></option>
                     <% }) %>

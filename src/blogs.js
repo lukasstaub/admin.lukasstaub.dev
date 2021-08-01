@@ -4,13 +4,26 @@ const knex = require("./helpers/knex");
 const blogs = Router();
 
 blogs.get("/", async (req, res) => {
+    const [row] = await knex("website_config").where("name", "=", "featured_post");
     const [contents] = await knex.raw(`
         SELECT id, title, slug, (SELECT username FROM users WHERE id = user_id) AS username, published_at, (SELECT name FROM categories WHERE id = category_id) AS category
         FROM blogs
         ORDER BY title ASC
     `);
 
-    return res.render("blogs/index", { user: req.user, contents });
+    console.log(row.value);
+
+    return res.render("blogs/index", { user: req.user, contents, featured: row.value });
+});
+
+blogs.post("/featured", async (req, res) => {
+    await knex("website_config")
+        .where("name", "=", "featured_post")
+        .update({
+            value: req.body.id === "null" ? null : req.body.id,
+        });
+
+    return res.redirect("/blogs");
 });
 
 //create blogpost
@@ -26,7 +39,7 @@ blogs.post("/new", async (req, res) => {
         title: title,
         slug: title.toLowerCase().replace(/\s/g, "-"),
         user_id: req.user.id,
-        category_id: category,
+        category_id: category === "null" ? null : category,
         body,
         language,
     });
@@ -60,7 +73,7 @@ blogs.post("/edit/:id", async (req, res) => {
             title: title,
             slug: title.toLowerCase().replace(/\s/g, "-"),
             user_id: req.user.id,
-            category_id: category,
+            category_id: category === "null" ? null : category,
             body,
             language,
         });
