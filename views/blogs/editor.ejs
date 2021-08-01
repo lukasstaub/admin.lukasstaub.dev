@@ -35,13 +35,13 @@
         <div class="mb-3 d-flex">
             <div style="flex: 1; margin-right: 12px">
                 <label for="select-category" class="form-label">Category</label>
-                <select id="select-category" class="form-select" aria-label="Select Category" name="category" value="<%= blog.category_id %>">
+                <select id="select-category" class="form-select" aria-label="Select Category" name="category" >
                     <% if(blog.slug) { %>
-                    <option <% if(!blog.category_id) { %>selected<% } %> disabled>Select Category</option>
+                    <option>Select Category</option>
                     <% } else { %>
-                    <option selected disabled>Select Category</option>
-                    <% } %> <% categories.map((cat) => { %>
-                    <option value="<%= cat.id %>"><%= cat.name %></option>
+                    <option selected>Select Category</option>
+                    <% } categories.map((cat) => { %>
+                    <option value="<%= cat.id %>" <% if(blog.category_id === cat.id) { %>selected<% } %> ><%= cat.name %></option>
                     <% }) %>
                 </select>
             </div>

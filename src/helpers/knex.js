@@ -6,7 +6,7 @@ module.exports = knex({
         host: process.env.DB_HOST,
         user: process.env.FRONTEND_USERNAME,
         password: process.env.FRONTEND_PASSWORD,
-        database: "lukasstaub.dev",
+        database: process.env.DB_NAME,
         charset: "utf8mb4",
     },
 });
