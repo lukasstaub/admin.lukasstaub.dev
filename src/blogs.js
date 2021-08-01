@@ -11,8 +11,6 @@ blogs.get("/", async (req, res) => {
         ORDER BY title ASC
     `);
 
-    console.log(row.value);
-
     return res.render("blogs/index", { user: req.user, contents, featured: row.value });
 });
 

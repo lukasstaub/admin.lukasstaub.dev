@@ -3,7 +3,7 @@
         <form class="input-group" action="/blogs/featured" method="POST">
             <select id="select-featured-post" class="form-select" aria-label="Select featured Post" name="id">
                 <option <% if(!featured) { %>selected<% } %> value="null">Select featured Post</option>
-                <% contents.map((content) => { %>
+                <% contents.filter((el) => el.published_at).map((content) => { %>
                 <option value="<%= content.id %>" <% if(featured == content.id) { %>selected<% } %>><%= content.title %></option>
                 <% }) %>
             </select>
