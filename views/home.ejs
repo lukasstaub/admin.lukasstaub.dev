@@ -90,7 +90,7 @@
     var requestAmountChart = returnChart(requestAmount, ctx, "Most accessed pages of the Month", "x");
 
     const ctx2 = document.getElementById("user-agent-chart").getContext("2d");
-    var userAgentChart = returnChart(userAgentDataCount, ctx2, "Devices accessing lukasstaub.dev in the last 24h", "y", "pie");
+    var userAgentChart = returnChart(userAgentDataCount, ctx2, "Devices accessing lukasstaub.dev in the last 24h", "y");
 
     const ctx3 = document.getElementById("request-resource-chart").getContext("2d");
     var resourcesChart = returnChart(resources, ctx3, "Most requested resources of the Month");
