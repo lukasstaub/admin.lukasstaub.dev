@@ -1,0 +1,11 @@
+<form class="container py-3" method="POST" <% if(config.id) { %>
+    action="/config/edit/<%= config.id %>"<% } %> enctype="multipart/form-data">
+    <h1 class="mb-3"><%= config.id ? "Edit Configuration" : "Add new Configuration" %></h1>
+    <div class="input-group">
+        <input type="text" class="form-control mb-4" name="name" placeholder="Name" value="<%= config.name %>" required />
+        <input type="text" class="form-control mb-4" name="value" placeholder="Value" value="<%= config.value %>" />
+    </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary">Save</button>
+    </div>
+</form>

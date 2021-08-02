@@ -6,6 +6,7 @@ const knex = require("./helpers/knex");
 const bcrypt = require("bcryptjs");
 const useragent = require("useragent");
 const projects = require("./projects");
+const config = require("./config");
 
 const router = Router();
 
@@ -77,6 +78,7 @@ router.use("/api", api);
 router.use("/cdn", cdn);
 router.use("/blogs", blogs);
 router.use("/projects", projects);
+router.use("/config", config);
 
 router.get("/*", (req, res) => {
     return res.render("404", { user: req.user });

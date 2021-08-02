@@ -1,0 +1,43 @@
+<div class="container py-3">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <td>Name</td>
+            <td>Value</td>
+            <td>
+                <div class="d-flex justify-content-end">
+                    <a href="/config/new" class="btn btn-primary ms-3">New</a>
+                </div>
+            </td>
+        </thead>
+        <tbody>
+            <% if(contents.length > 0) { contents.map((el) => { %>
+            <tr>
+                <td><p><%= el.name %></p></td>
+                <td><p><%= el.value ? el.value : Boolean(el.value) %></p></td>
+                <td>
+                    <div class="d-flex justify-content-end">
+                        <a href="/config/edit?id=<%= el.id %>" class="btn btn-secondary">Edit</a>
+                        <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            <% }) } else { %>
+            <tr>
+                <td colspan="6">
+                    <p style="text-align: center">No Configuration yet</p>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function delItem(id) {
+        const confirmed = confirm("Do you really want to delete this object?");
+
+        if (confirmed) {
+            window.location.href = "/config/delete?id=" + id;
+        }
+    }
+</script>
