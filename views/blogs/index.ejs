@@ -37,6 +37,8 @@
                         <a href="/blogs/edit?id=<%= el.id %>" class="btn btn-secondary">Edit</a>
                         <% if(!el.published_at) { %>
                         <a href="/blogs/publish/<%= el.id %>" class="btn btn-success ms-3">Publish</a>
+                        <% } else { %>
+                        <a href="/blogs/conceal/<%= el.id %>" class="btn btn-warning ms-3">Conceal</a>
                         <% } %>
                         <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
                     </div>

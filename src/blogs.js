@@ -91,6 +91,17 @@ blogs.get("/publish/:id", async (req, res) => {
 
     return res.redirect("/blogs");
 });
+blogs.get("/conceal/:id", async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) return res.redirect("/blogs");
+
+    await knex("blogs").where("id", "=", id).update({
+        published_at: null,
+    });
+
+    return res.redirect("/blogs");
+});
 
 //delete blogpost
 blogs.get("/delete", async (req, res) => {

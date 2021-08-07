@@ -7,6 +7,10 @@
         margin-right: 1rem;
     }
 
+    .ck-editor__editable_inline {
+        min-height: 600px;
+    }
+
     #manage {
         width: 30%;
     }
@@ -59,7 +63,11 @@
         </div>
         <div class="mt-4 d-flex justify-content-end">
             <a href="/blogs" class="btn btn-secondary ms-3">Cancel</a>
-            <% if(blog.slug && !blog.published_at) { %> <a href="/blogs/publish/<%= blog.id %>" class="btn btn-success ms-3">Publish</a> <% } %>
+            <% if(blog.slug && !blog.published_at) { %> 
+            <a href="/blogs/publish/<%= blog.id %>" class="btn btn-success ms-3">Publish</a>
+            <% } else if(blog.slug && blog.published_at) { %>
+            <a href="/blogs/conceal/<%= blog.id %>" class="btn btn-warning ms-3">Conceal</a>
+            <% } %>
             <button type="submit" class="btn btn-primary ms-3">Save</button>
         </div>
     </form>

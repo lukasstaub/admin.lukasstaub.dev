@@ -1,7 +1,7 @@
 try {
     ClassicEditor.create(document.querySelector("textarea"), {
         simpleUpload: {
-            uploadUrl: '<%= process.env.NODE_ENV === "production" ? "https://admin.lukasstaub.dev/cdn/upload?code=true":"http://localhost:4300/cdn/upload?code=true" %>',
+            uploadUrl: "/cdn/upload?code=true",
             withCredentials: true,
         },
     }).then((editor) => {
@@ -12,7 +12,6 @@ try {
 
         editor.ui.view.editable.element.style.resize = "vertical";
         editor.ui.view.editable.element.style.overflowY = "auto";
-        editor.ui.view.editable.element.style.minHeight = "600px";
     });
 } catch (e) {
     console.error(e);

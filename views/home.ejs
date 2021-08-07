@@ -92,8 +92,8 @@
     const ctx2 = document.getElementById("user-agent-chart").getContext("2d");
     var userAgentChart = returnChart(userAgentDataCount, ctx2, "Devices accessing lukasstaub.dev in the last 24h", "y");
 
-    const ctx3 = document.getElementById("request-resource-chart").getContext("2d");
-    var resourcesChart = returnChart(resources, ctx3, "Most requested resources of the Month");
+    // const ctx3 = document.getElementById("request-resource-chart").getContext("2d");
+    // var resourcesChart = returnChart(resources, ctx3, "Most requested resources of the last 7 Days", "x", "doughnut");
 
     const ctx4 = document.getElementById("email-sent-chart").getContext("2d");
     var emailsChart = returnChart(emails, ctx4, "Number of emails sent daily in the last 30 Days", "x");
