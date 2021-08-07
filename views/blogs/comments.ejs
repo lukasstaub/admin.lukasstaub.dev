@@ -4,7 +4,7 @@
             <td>#</td>
             <td>Name</td>
             <td>Email</td>
-            <td>Approved At</td>
+            <td>Approved/Declined</td>
             <td>Submitted At</td>
             <td>IP</td>
             <td></td>
@@ -18,8 +18,10 @@
                 <td>
                     <% if(el.approved_at) { %>
                     <p class="text-success fw-bold"><%= new Date(el.approved_at).toLocaleString() %></p>
-                    <% } else { %>
-                    <p class="text-danger fw-bold">Pending</p>
+                    <% } else if(el.declined_at) { %>
+                    <p class="text-danger fw-bold"><%= new Date(el.declined_at).toLocaleString() %></p>
+                    <% } else { %>
+                    <p class="text-danger fw-bold fst-italic">Pending...</p>
                     <% } %>
                 </td>
                 <td><p><%= new Date(el.submitted_at).toLocaleString() %></p></td>
@@ -29,7 +31,9 @@
                         <button type="button" class="btn btn-secondary" onclick="setBody('<%= el.body %>')" data-bs-toggle="modal" data-bs-target="#preview-modal">Show</button>
                         <% if(!el.approved_at) { %>
                         <a href="/blogs/comments/approve/<%= el.id %>" class="btn btn-success ms-3">Approve</a>
-                        <% } %>
+                        <% } %> <% if(!el.declined_at) { %>
+                        <a href="/blogs/comments/decline/<%= el.id %>" class="btn btn-warning ms-3">Decline</a>
+                        <% } %>
                         <button class="btn btn-danger ms-3" onclick="delItem('<%= el.id %>')">Delete</button>
                     </div>
                 </td>

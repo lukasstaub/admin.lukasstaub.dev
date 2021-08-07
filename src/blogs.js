@@ -176,7 +176,7 @@ blogs.get("/categories/delete", async (req, res) => {
 
 //Comments Section
 blogs.get("/comments", async (req, res) => {
-    const comments = await knex("comments").orderBy("approved_at", "asc");
+    const comments = await knex("comments").orderBy("approved_at", "asc").orderBy("declined_at", "asc");
 
     return res.render("blogs/comments", { user: req.user, contents: comments });
 });
@@ -184,6 +184,16 @@ blogs.get("/comments", async (req, res) => {
 blogs.get("/comments/approve/:id", async (req, res) => {
     await knex("comments").where("id", "=", req.params.id).update({
         approved_at: new Date(),
+        declined_at: null,
+    });
+
+    return res.redirect("/blogs/comments");
+});
+
+blogs.get("/comments/decline/:id", async (req, res) => {
+    await knex("comments").where("id", "=", req.params.id).update({
+        declined_at: new Date(),
+        approved_at: null,
     });
 
     return res.redirect("/blogs/comments");
