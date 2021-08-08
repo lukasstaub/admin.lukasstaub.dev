@@ -13,7 +13,7 @@ blogs.get("/", async (req, res) => {
     const [contents] = await knex.raw(`
         SELECT id, title, slug, (SELECT username FROM users WHERE id = user_id) AS username, published_at, (SELECT name FROM categories WHERE id = category_id) AS category
         FROM blogs
-        ORDER BY title ASC
+        ORDER BY published_at ASC, slug ASC
     `);
 
     return res.render("blogs/index", { user: req.user, contents, featured: row.value });
