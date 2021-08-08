@@ -66,9 +66,11 @@ cdn.post("/upload", async (req, res) => {
         file = req.files.file;
     }
 
+    const name = file.name.replace(/\s/g, "-");
+
     try {
         await knex("files").insert({
-            name: file.name,
+            name,
             content_type: file.mimetype,
             data: file.data,
             user_id: req.user.id,
@@ -76,7 +78,7 @@ cdn.post("/upload", async (req, res) => {
 
         if (code) {
             return res.json({
-                url: "https://cdn.lukasstaub.dev/" + file.name,
+                url: "https://cdn.lukasstaub.dev/" + name,
             });
         } else {
             return res.redirect("/cdn");
