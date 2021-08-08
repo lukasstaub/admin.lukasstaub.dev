@@ -1,4 +1,9 @@
 const { Router } = require("express");
+const slugify = require("slugify");
+const createDomPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+const purify = createDomPurify(new JSDOM().window);
+
 const knex = require("./helpers/knex");
 
 const blogs = Router();
@@ -35,10 +40,10 @@ blogs.post("/new", async (req, res) => {
 
     const [id] = await knex("blogs").insert({
         title: title,
-        slug: title.toLowerCase().replace(/\s/g, "-"),
+        slug: slugify(title, { lower: true, strict: true }),
         user_id: req.user.id,
         category_id: category === "null" ? null : category,
-        body,
+        body: purify.sanitize(body),
         language,
     });
 
@@ -69,10 +74,10 @@ blogs.post("/edit/:id", async (req, res) => {
         .where("id", "=", id)
         .update({
             title: title,
-            slug: title.toLowerCase().replace(/\s/g, "-"),
+            slug: slugify(title, { lower: true, strict: true }),
             user_id: req.user.id,
             category_id: category === "null" ? null : category,
-            body,
+            body: purify.sanitize(body),
             language,
         });
 
