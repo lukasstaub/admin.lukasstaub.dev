@@ -15,19 +15,16 @@ router.get("/", async (req, res) => {
 
     const query1 = `SELECT id, user_agent FROM access_logs WHERE ROUND(UNIX_TIMESTAMP(request_time) * 1000) > ${Date.now() - 60 * 60 * 24 * 1000} ORDER BY user_agent ASC`;
     const query2 = `SELECT id, page_name FROM access_logs WHERE ROUND(UNIX_TIMESTAMP(request_time) * 1000) > ${new Date(`${today.getFullYear()}-${today.getMonth()}-${today.getDate()} 00:00:00`).getTime()} ORDER BY page_name ASC`;
-    const query3 = `SELECT id, requested_resource FROM access_logs WHERE ROUND(UNIX_TIMESTAMP(request_time) * 1000) > ${Date.now() - 60 * 60 * 24 * 7 * 1000} AND requested_resource NOT LIKE '%.%' ORDER BY requested_resource ASC`;
-    const query4 = `SELECT * FROM sent_emails WHERE ROUND(UNIX_TIMESTAMP(timestamp) * 1000) > ${Date.now() - 60 * 60 * 24 * 30 * 1000}`;
+    const query4 = `SELECT id, timestamp FROM sent_emails WHERE ROUND(UNIX_TIMESTAMP(timestamp) * 1000) > ${Date.now() - 60 * 60 * 24 * 30 * 1000}`;
 
     const [userAgentData] = await knex.raw(query1);
     const [requestData] = await knex.raw(query2);
-    const [requestedResourcesData] = await knex.raw(query3);
     const [sentEmails] = await knex.raw(query4);
 
     return res.render("home", {
         user: req.user,
         userAgentData: userAgentData.map((el) => ({ ...el, user_agent: useragent.parse(el.user_agent) })),
         requestData,
-        requestedResourcesData,
         sentEmails,
     });
 });

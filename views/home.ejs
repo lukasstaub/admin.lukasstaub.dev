@@ -43,14 +43,12 @@
     <canvas id="request-amount-chart" height="150" class="mb-5"></canvas>
     <canvas id="user-agent-chart" height="150" class="mb-5"></canvas>
 
-    <canvas id="request-resource-chart" height="150" class="mb-5"></canvas>
     <canvas id="email-sent-chart" height="150" class="mb-5"></canvas>
 </div>
 
 <script type="module" async>
     const userAgentData = JSON.parse(`<%- JSON.stringify(userAgentData) %>`);
     const requestData = JSON.parse(`<%- JSON.stringify(requestData) %>`);
-    const requestedResourcesData = JSON.parse(`<%- JSON.stringify(requestedResourcesData) %>`);
     const sentEmails = JSON.parse(`<%- JSON.stringify(sentEmails) %>`);
 
     const res = await fetch("/assets/colors.json");
@@ -67,11 +65,6 @@
     var requestAmount = {};
     requestData.forEach((el) => {
         requestAmount[el.page_name] = requestAmount[el.page_name] ? requestAmount[el.page_name] + 1 : 1;
-    });
-
-    var resources = {};
-    requestedResourcesData.forEach((el) => {
-        resources[el.requested_resource] = resources[el.requested_resource] ? resources[el.requested_resource] + 1 : 1;
     });
 
     var emails = {};
@@ -92,11 +85,8 @@
     const ctx2 = document.getElementById("user-agent-chart").getContext("2d");
     var userAgentChart = returnChart(userAgentDataCount, ctx2, "Devices accessing lukasstaub.dev in the last 24h", "y");
 
-    // const ctx3 = document.getElementById("request-resource-chart").getContext("2d");
-    // var resourcesChart = returnChart(resources, ctx3, "Most requested resources of the last 7 Days", "x", "doughnut");
-
-    const ctx4 = document.getElementById("email-sent-chart").getContext("2d");
-    var emailsChart = returnChart(emails, ctx4, "Number of emails sent daily in the last 30 Days", "x");
+    const ctx3 = document.getElementById("email-sent-chart").getContext("2d");
+    var emailsChart = returnChart(emails, ctx3, "Number of emails sent daily in the last 30 Days", "x");
 
     function returnChart(objectWithCount, ctx, title, orientation = "y", type = "bar") {
         return new Chart(ctx, {
